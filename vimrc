@@ -6,6 +6,14 @@
 let g:vim_data_home = $XDG_DATA_HOME . '/vim'
 let g:vim_config_home = $XDG_CONFIG_HOME . '/vim'
 
+" Make sure vim uses a compatible shell
+if has("win32")
+    set shell=powershell.exe
+    set shellcmdflag=-Command
+elseif &shell =~# 'fish$'
+    set shell=/bin/zsh
+endif
+
 
 " ============================================================================
 " Python Integration
