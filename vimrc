@@ -4,21 +4,8 @@
 
 
 let g:vim_data_home = $XDG_DATA_HOME . '/vim'
-let g:vim_config_home = $XDG_CONFIG_HOME . '/vim'
-
-" Make sure vim uses a compatible shell
-if has("win32")
-    set shell=powershell.exe
-    set shellcmdflag=-Command
-elseif &shell =~# 'fish$'
-    set shell=/bin/zsh
-endif
-
-
-" ============================================================================
-" Python Integration
-" ============================================================================
-
+" let g:vim_config_home = $XDG_CONFIG_HOME . '/vim'
+let g:vim_config_home = $HOME . '/vimfiles'
 
 if has("win32")
     let g:python3_hostdir = g:vim_data_home . '/pyvenv35'
@@ -27,6 +14,16 @@ else
     let g:python3_hostdir = g:vim_data_home . '/pyvenv3'
     let g:python3_host_prog = g:python3_hostdir . '/bin/python3'
     " let g:python_host_prog = 'python2.7'
+endif
+
+" Make sure vim uses a compatible shell
+if has("win32")
+    " set shell=powershell.exe
+    " set shellcmdflag=-Command
+    let &shell='cmd.exe'
+    let $PATH= g:python3_hostdir . '/Scripts;' . $PATH
+elseif &shell =~# 'fish$'
+    set shell=/bin/zsh
 endif
 
 
@@ -149,11 +146,16 @@ vnoremap <F3> <Esc>:FZF<CR>
 " --------------------
 Plug 'Shougo/denite.nvim'
 " C-@ is Control-Space
-nnoremap <C-@> :Denite -mode=normal -cursor-wrap=true buffer<CR>
-vnoremap <C-@> <Esc>:Denite -mode=normal -cursor-wrap=true buffer<CR>
+if has('win32')
+    nnoremap <C-Space> :Denite -mode=normal -cursor-wrap=true buffer<CR>
+    vnoremap <C-Space> <Esc>:Denite -mode=normal -cursor-wrap=true buffer<CR>
+else
+    nnoremap <C-@> :Denite -mode=normal -cursor-wrap=true buffer<CR>
+    vnoremap <C-@> <Esc>:Denite -mode=normal -cursor-wrap=true buffer<CR>
+    nnoremap <Leader>` :Denite -mode=normal -cursor-wrap=true outline<CR>
+    vnoremap <Leader>` <Esc>:Denite -mode=normal -cursor-wrap=true outline<CR>
+endif
 
-nnoremap <Leader>` :Denite -mode=normal -cursor-wrap=true outline<CR>
-vnoremap <Leader>` <Esc>:Denite -mode=normal -cursor-wrap=true outline<CR>
 
 " " Fuzzy file search
 " " nnoremap <F3> :Denite -direction=botright file_rec<CR>
@@ -390,7 +392,7 @@ endfunction
 augroup filetype_python
     autocmd!
     autocmd BufRead,BufNewFile *.py
-        \ source $XDG_CONFIG_HOME/vim/filetype/python.vim
+        \ source $HOME/vimfiles/filetype/python.vim
     autocmd FileType python set omnifunc=python3complete#Complete
     autocmd FileType python let g:python_highlight_numbers=1
     autocmd FileType python let g:python_highlight_exceptions=1
@@ -417,7 +419,7 @@ augroup END
 augroup filetype_rust
     autocmd!
     autocmd BufRead,BufNewFile *.rs
-        \ source $XDG_CONFIG_HOME/vim/filetype/rust.vim
+        \ source $HOME/vimfiles/filetype/rust.vim
 
     " Neomake
     autocmd BufWritePost *.rs Neomake
@@ -430,7 +432,7 @@ augroup END
 augroup filetype_vim
     autocmd!
     autocmd BufRead,BufNewFile *.vim
-        \ source $XDG_CONFIG_HOME/vim/filetype/vim.vim
+        \ source $HOME/vimfiles/filetype/vim.vim
 
     " delimitMate
     autocmd FileType vim let g:delimitMate_autoclose=1

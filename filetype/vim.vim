@@ -1,5 +1,5 @@
 " General devel settings
-source $XDG_CONFIG_HOME/nvim/filetype/devel.vim
+source $HOME/vimfiles/filetype/devel.vim
 
 " =====================================================
 " Vim make for errors
